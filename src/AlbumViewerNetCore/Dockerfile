@@ -6,8 +6,8 @@ WORKDIR /src
 COPY . .
 
 # Restore and publish
-RUN dotnet restore AlbumViewerNetCore.sln
-RUN dotnet publish AlbumViewerNetCore.csproj -c Release -o /app/publish
+RUN dotnet restore src/AlbumViewerNetCore/AlbumViewerNetCore.csproj
+RUN dotnet publish src/AlbumViewerNetCore/AlbumViewerNetCore.csproj -c Release -o /app/publish
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
