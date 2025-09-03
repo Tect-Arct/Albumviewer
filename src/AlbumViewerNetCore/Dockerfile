@@ -5,9 +5,9 @@ WORKDIR /src
 # Copy everything from Jenkins Release folder (includes .sln and project files)
 COPY . .
 
-# Restore and publish
-RUN dotnet restore src/AlbumViewerNetCore/AlbumViewerNetCore.csproj
-RUN dotnet publish src/AlbumViewerNetCore/AlbumViewerNetCore.csproj -c Release -o /app/publish
+# Restore and publish (no src folder)
+RUN dotnet restore AlbumViewerNetCore.csproj
+RUN dotnet publish AlbumViewerNetCore.csproj -c Release -o /app/publish
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
