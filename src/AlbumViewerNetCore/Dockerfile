@@ -1,19 +1,17 @@
-# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 
-# Copy everything from Jenkins Release folder (includes .sln and project files)
+# Copy all files from repo root
 COPY . .
 
-# Restore and publish (no src folder)
-RUN dotnet restore AlbumViewerNetCore.csproj
-RUN dotnet publish AlbumViewerNetCore.csproj -c Release -o /app/publish
+# Restore using the solution file at root
+RUN dotnet restore AlbumViewerNetCore.sln
 
-# Runtime stage
+# Build the solution
+RUN dotnet publish AlbumViewerNetCore.sln -c Release -o /app/publish
+
+# Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
-WORKDIR /var/www/albumviewer
-
-# Copy published app from build stage
+WORKDIR /app
 COPY --from=build /app/publish .
-
 ENTRYPOINT ["dotnet", "AlbumViewerNetCore.dll"]
