@@ -1,6 +1,7 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+# Use .NET 5 runtime (ASP.NET Core)
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
-MAINTAINER Rick Strahl
+LABEL maintainer="Rick Strahl"
 
 ENV ASPNETCORE_URLS=http://*:80
 ENV ASPNETCORE_ENVIRONMENT=Production
@@ -10,8 +11,8 @@ EXPOSE 1433
 
 WORKDIR /var/www/albumviewer
 
-# copy publish folder contents to web root
-COPY ./bin/Release/netcoreapp3.1/publish .
+# Copy publish output from Jenkins build
+COPY ./bin/Release/net5.0/publish .
 
-# Run out of Publish Folder
-CMD ["/bin/sh", "-c", "dotnet 'AlbumViewerNetCore.dll'"]
+# Run the application
+ENTRYPOINT ["dotnet", "AlbumViewerNetCore.dll"]
