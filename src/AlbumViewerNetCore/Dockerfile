@@ -1,18 +1,12 @@
-# Use .NET 5 runtime (ASP.NET Core)
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet restore AlbumViewerNetCore.sln
+RUN dotnet publish src/AlbumViewerNetCore/AlbumViewerNetCore.csproj -c Release -o /app/publish
+
+# Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
-
-LABEL maintainer="Rick Strahl"
-
-ENV ASPNETCORE_URLS=http://*:80
-ENV ASPNETCORE_ENVIRONMENT=Production
-
-# Allow 1433 for SQL Server Access
-EXPOSE 1433
-
 WORKDIR /var/www/albumviewer
-
-# Copy publish output from Jenkins build
-COPY ./bin/Release/net5.0/publish .
-
-# Run the application
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "AlbumViewerNetCore.dll"]
