@@ -22,7 +22,7 @@ namespace AlbumViewerNetCore
                 try
                 {
                     var db = services.GetRequiredService<AlbumViewerContext>();
-                    db.Database.Migrate();  // Ensures DB and tables are created
+                    db.Database.EnsureCreated();  // Ensures DB and tables are created
                     Console.WriteLine("✅ Database migration completed successfully.");
                 }
                 catch (Exception ex)
